@@ -4,13 +4,17 @@
   "description": "Node Connecting to mySQL database",
   "main": "server.js",
   "scripts": {
-    "test": "node server.js"
+    "dev": "nodemon server.js"
   },
   "author": "Sherwin Dapito",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
+    "express-myconnection": "^1.0.4",
     "mysql": "^2.13.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
