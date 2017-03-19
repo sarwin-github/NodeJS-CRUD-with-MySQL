@@ -1,0 +1,16 @@
+{
+  "name": "node_mysql_connecting",
+  "version": "1.0.0",
+  "description": "Node Connecting to mySQL database",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "author": "Sherwin Dapito",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "mysql": "^2.13.0"
+  }
+}
