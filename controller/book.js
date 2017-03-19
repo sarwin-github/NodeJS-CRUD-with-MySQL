@@ -9,19 +9,20 @@ function bookRouter(router,connection)
 }
 
 bookRouter.prototype.handleRoutes = (router,connection) => {
-
 	var self = this;
 	router.get("/hello", (request, response) => {
 			response.json({"Message": "Testing Route !"});
 	});
 
-	// Use HTTPGET - get all books
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Use HTTPGET - get all books
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	router.get("/books", (request,response) => {
 	 	//SELECT * FROM BOOK_TABLE
         var query = "SELECT * FROM ??";
         var table = ["book"];
         query = mysql.format(query,table);
-        connection.query(query,function(error,rows){
+        connection.query(query, (error,rows) => {
         	//connection.release(); release connection or close connection
             if(error) {
                 response.json({"Error" : true, "Message" : "Error executing MySQL query"});
@@ -30,7 +31,9 @@ bookRouter.prototype.handleRoutes = (router,connection) => {
         }});
     });
 
-	// Use HTTPGET - Get book by ID
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Use HTTPGET - Get book by ID
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	router.get("/books/:id", (request,response) => {
 			//SELECT * FROM BOOK_TABLE WHERE BOOK_FIELD = PARAMETER/query string
 			var query = "SELECT * FROM ?? WHERE ??=?";
@@ -45,7 +48,9 @@ bookRouter.prototype.handleRoutes = (router,connection) => {
 			}});
 		});
 
-	// Use HTTPPOST - Create a new book
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Use HTTPPOST - Create a new book
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     router.post("/books/create", (request,response) => {
     	//INSERT INTO TABLE_SET(BOOKS FIELDS) VALUES (BOOK FIELDS VALUE)
         var query = "INSERT INTO ??(??,??,??) VALUES (?,?,?)";
@@ -57,7 +62,7 @@ bookRouter.prototype.handleRoutes = (router,connection) => {
         				request.body.Price];
 
         query = mysql.format(query,table);
-        
+
         connection.query(query, (error,rows) => {
             if(error) {
                 response.json({"Error" : true, "Message" : "Error executing MySQL query"});
@@ -66,7 +71,9 @@ bookRouter.prototype.handleRoutes = (router,connection) => {
         }});
     });
 
-    // Use HTTPPUT - Update a book based on its query string id
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Use HTTPPUT - Update a book based on its query string id
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
     router.put("/books/update/:id", (request,response) => {
         //UPDATE BOOK_TABLE SET BOOK FIELD 1 = VALUE, BOOK FIELD 2 = VALUE  WHERE BOOK_FIELD = PARAMETER/query string
         var query = "UPDATE ?? SET ??=?, ??=?, ??=? WHERE ?? = ?";
@@ -85,7 +92,9 @@ bookRouter.prototype.handleRoutes = (router,connection) => {
         }});       
     });
     
-    // Use HTTPDELETE - Delete a book based on its query string id
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Use HTTPDELETE - Delete a book based on its query string id
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
     router.delete("/books/delete/:id", (request,response) => {
             //DELETE FROM BOOK_TABLE WHERE BOOK_FIELD = PARAMETER/query string 
             var query = "DELETE from ?? WHERE ??=?";
@@ -96,8 +105,8 @@ bookRouter.prototype.handleRoutes = (router,connection) => {
                     response.json({"Error" : true, "Message" : "Error executing MySQL query"});
                 } else {
                     response.json({"Error" : false, "Message" : "The book that has id:" + request.params.id + " has been deleted"});
-            }});
-        });
+        }});
+    });
 }
 
 module.exports = bookRouter;

@@ -1,10 +1,9 @@
-//this modules must be arrange properly - arrangement matters
-var express = require("express"); 
-var mysql   = require("mysql"); //set database
-var bodyParser  = require("body-parser");
-var rest = require("./controller/book");
-var app  = express();
-
+//Set Modules
+var express 	= require("express")
+,	mysql   	= require("mysql") //set database
+, 	bodyParser  = require("body-parser")
+, 	rest 		= require("./controller/book")
+, 	app  		= express();
 
 function SERVER(){
 	var self = this;
