@@ -53,7 +53,7 @@ SERVER.prototype.startServer = function() {
 
 //If there's a connection error, release connection
 SERVER.prototype.stop = function(error) {
-    console.log("ISSUE WITH MYSQL \n" + error);
+    console.log("Connection Error: \n" + error);
     process.exit(1);
 }
 
