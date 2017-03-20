@@ -22,7 +22,9 @@ bookRouter.prototype.handleRoutes = ((router,connection) => {
         var table = ["book"];
         query = mysql.format(query,table);
         connection.query(query, (error,books) => {
-        	//connection.release(); release connection or close connection
+        	if(!books){
+                return response.status(500).send({"Error" : true, error: error, message: 'Something went wrong.'});
+            }
             if(error) {
                 response.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
@@ -35,16 +37,19 @@ bookRouter.prototype.handleRoutes = ((router,connection) => {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	var getBookByID = ((request,response) => {
 			//SELECT * FROM BOOK_TABLE WHERE BOOK_FIELD = PARAMETER/query string
-			var query = "SELECT * FROM ?? WHERE ??=?";
-			var table = ["book", "id", request.params.id];
-			query = mysql.format(query,table);
+		var query = "SELECT * FROM ?? WHERE ??=?";
+		var table = ["book", "id", request.params.id];
+		query = mysql.format(query,table);
 
-			connection.query(query, (error, book) => {
-				if(error) {
-                	response.json({"Error" : true, "Message" : "Error executing MySQL query"});
-            	} else {
-               	 	response.json({ success: true, "Message" : "Successfully Fetched a Book by ID", "Book Result" : book});	
-			}});
+		connection.query(query, (error, book) => {
+            if(!book){
+                return response.status(500).send({"Error" : true, error: error, message: 'Something went wrong.'});
+            } 
+            if(error) {
+            	response.json({"Error" : true, "Message" : "Error executing MySQL query"});
+        	} else {
+           	 	response.json({ success: true, "Message" : "Successfully Fetched a Book by ID", "Book Result" : book});	
+        }});
 	});
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -63,6 +68,9 @@ bookRouter.prototype.handleRoutes = ((router,connection) => {
         query = mysql.format(query,table);
 
         connection.query(query, (error,books) => {
+            if(!books){
+                return response.status(500).send({"Error" : true, error: error, message: 'Something went wrong.'});
+            }
             if(error) {
                 response.json({"Error" : true, "Message" : "Error executing MySQL query"});
             } else {
@@ -84,6 +92,9 @@ bookRouter.prototype.handleRoutes = ((router,connection) => {
         query = mysql.format(query, table); 
 
         connection.query(query, (error, book) => {
+            if(!book){
+                return response.status(500).send({"Error" : true, error: error, message: 'Something went wrong.'});
+            }
             if(error) {
                 response.json({"Error": true, "Message" : "Error executing MySQL query"});
             } else {
@@ -96,14 +107,17 @@ bookRouter.prototype.handleRoutes = ((router,connection) => {
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
     var deleteBook = ((request,response) => {
             //DELETE FROM BOOK_TABLE WHERE BOOK_FIELD = PARAMETER/query string 
-            var query = "DELETE from ?? WHERE ??=?";
-            var table = ["book", "id", request.params.id];
-            query = mysql.format(query,table);
-            connection.query(query,(error, book) => {
-                if(error) {
-                    response.json({"Error" : true, "Message" : "Error executing MySQL query"});
-                } else {
-                    response.json({ success: true, "Message" : "The book with this id:" + request.params.id + " has been deleted"});
+        var query = "DELETE from ?? WHERE ??=?";
+        var table = ["book", "id", request.params.id];
+        query = mysql.format(query,table);
+        connection.query(query,(error, book) => {
+            if(!book){
+                return response.status(500).send({"Error" : true, error: error, message: 'Something went wrong.'});
+            }
+            if(error) {
+                response.json({"Error" : true, "Message" : "Error executing MySQL query"});
+            } else {
+                response.json({ success: true, "Message" : "The book with this id:" + request.params.id + " has been deleted"});
         }});
     });
 
@@ -111,7 +125,7 @@ bookRouter.prototype.handleRoutes = ((router,connection) => {
 // Book Routes
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
     router.get("/books", getAllBooks);
-    router.get("/books/:id", getBookByID);
+    router.get("/books/:id([0-9])", getBookByID);
     router.post("/books/create", createBook);
     router.put("/books/update/:id", updateBookByID);
     router.delete("/books/delete/:id", deleteBook); 
